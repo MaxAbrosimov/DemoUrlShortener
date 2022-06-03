@@ -14,9 +14,9 @@ import org.springframework.test.util.ReflectionTestUtils;
 @RunWith(MockitoJUnitRunner.class)
 public class UrlConverterTest {
 
-    private static final String PREFIX = "https://shortapp";
+    private static final String PREFIX = "https://shortapp/r/";
     private static final String LONG_URL = "https://some_long.url";
-    private static final String SHORT_URL = "short.url";
+    private static final Long SHORT_URL = 1L;
 
     @InjectMocks
     private UrlConverter urlConverter;
@@ -31,20 +31,17 @@ public class UrlConverterTest {
         ShortifyDto result = urlConverter.convert(LONG_URL, SHORT_URL);
 
         Assert.assertEquals(result.getLongUrl(), LONG_URL);
-        Assert.assertEquals(result.getShortUrl(), concatUrlWithPref(SHORT_URL));
+        Assert.assertEquals(result.getShortUrl(), concatUrlWithPref(SHORT_URL.toString()));
     }
 
     @Test
     public void testConvertShortToUrl() {
         //given
-        ShortToUrl shortToUrl = new ShortToUrl();
-        shortToUrl.setShortUrl(SHORT_URL);
-        shortToUrl.setUrl(LONG_URL);
+        ShortToUrl shortToUrl = new ShortToUrl(LONG_URL);
         //then
         ShortifyDto result = urlConverter.convert(shortToUrl);
 
         Assert.assertEquals(result.getLongUrl(), shortToUrl.getUrl());
-        Assert.assertEquals(result.getShortUrl(), concatUrlWithPref(shortToUrl.getShortUrl()));
     }
 
     @Test
@@ -57,11 +54,11 @@ public class UrlConverterTest {
         ShortifyDto result = urlConverter.convert(urlToShort);
 
         Assert.assertEquals(result.getLongUrl(), urlToShort.getUrl());
-        Assert.assertEquals(result.getShortUrl(), concatUrlWithPref(urlToShort.getShortUrl()));
+        Assert.assertEquals(result.getShortUrl(), concatUrlWithPref(urlToShort.getShortUrl().toString()));
     }
 
     private String concatUrlWithPref(String url) {
-        return PREFIX + "/r/" + url;
+        return PREFIX + url;
     }
 
 }

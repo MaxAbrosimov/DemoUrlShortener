@@ -5,13 +5,14 @@ import org.springframework.data.cassandra.core.mapping.Table;
 
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @Table("url_to_short")
 public class UrlToShort implements Serializable {
 
     @PrimaryKey
     private String url;
-    private String shortUrl;
+    private Long shortUrl;
 
     public String getUrl() {
         return url;
@@ -21,11 +22,11 @@ public class UrlToShort implements Serializable {
         this.url = url;
     }
 
-    public String getShortUrl() {
+    public Long getShortUrl() {
         return shortUrl;
     }
 
-    public void setShortUrl(String shortUrl) {
+    public void setShortUrl(Long shortUrl) {
         this.shortUrl = shortUrl;
     }
 }

@@ -2,6 +2,7 @@ package com.task.domain;
 
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
+import org.thymeleaf.util.DateUtils;
 
 import java.io.Serializable;
 
@@ -9,14 +10,20 @@ import java.io.Serializable;
 public class ShortToUrl implements Serializable {
 
     @PrimaryKey
-    private String shortUrl;
+    private Long shortUrl;
     private String url;
 
-    public String getShortUrl() {
+
+    public ShortToUrl(String url) {
+        this.shortUrl = DateUtils.createNow().getTimeInMillis();
+        this.url = url;
+    }
+
+    public Long getShortUrl() {
         return shortUrl;
     }
 
-    public void setShortUrl(String shortUrl) {
+    public void setShortUrl(Long shortUrl) {
         this.shortUrl = shortUrl;
     }
 

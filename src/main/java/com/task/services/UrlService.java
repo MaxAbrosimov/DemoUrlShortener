@@ -1,9 +1,9 @@
 package com.task.services;
 
+import com.datastax.driver.core.utils.UUIDs;
 import com.task.converters.UrlConverter;
 import com.task.dtos.ShortifyDto;
 import com.task.dtos.exception.UrlNotFoundException;
-import com.task.utils.UrlShortener;
 import com.task.domain.ShortToUrl;
 import com.task.domain.UrlToShort;
 import com.task.dtos.exception.UrlException;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UrlService {
@@ -23,16 +24,19 @@ public class UrlService {
     private final UrlToShortRepository urlToShortRepository;
     private final ShortToUrlRepository shortToUrlRepository;
     private final UrlConverter urlConverter;
+    private final UrlValidator urlValidator;
 
     @Autowired
     public UrlService(
             UrlToShortRepository urlToShortRepository,
             ShortToUrlRepository shortToUrlRepository,
-            UrlConverter urlConverter
+            UrlConverter urlConverter,
+            UrlValidator urlValidator
     ) {
         this.urlToShortRepository = urlToShortRepository;
         this.shortToUrlRepository = shortToUrlRepository;
         this.urlConverter = urlConverter;
+        this.urlValidator = urlValidator;
     }
 
     public List<ShortifyDto> listAll() {
@@ -42,29 +46,23 @@ public class UrlService {
     }
 
     public ShortifyDto getByShort(String shortUrl) throws UrlNotFoundException {
-        return urlConverter.convert(shortToUrlRepository.findById(shortUrl).orElseThrow(UrlNotFoundException::new));
+        return urlConverter.convert(shortToUrlRepository.findById(Long.parseLong(shortUrl)).orElseThrow(UrlNotFoundException::new));
     }
 
     //TODO
     // add logs, code cleanup
     public ShortifyDto shortifyUrl(String url) throws UrlException {
-        String urlTo = (url.contains("http://") || url.contains("https://")) ? url : "https://" + url;
-        UrlValidator.validate(urlTo);
-        Optional<UrlToShort> shortUrlOpt = urlToShortRepository.findById(urlTo);
+        urlValidator.validate(url);
+        Optional<UrlToShort> shortUrlOpt = urlToShortRepository.findById(url);
         if (!shortUrlOpt.isPresent()) {
-            String shortUrl = UrlShortener.shortifyUrl(urlTo);
+            ShortToUrl shortToUrlSaved = shortToUrlRepository.save(new ShortToUrl(url));
 
             UrlToShort urlToShortUrl = new UrlToShort();
-
-            urlToShortUrl.setShortUrl(shortUrl);
-            urlToShortUrl.setUrl(urlTo);
+            urlToShortUrl.setShortUrl(shortToUrlSaved.getShortUrl());
+            urlToShortUrl.setUrl(url);
             urlToShortRepository.save(urlToShortUrl);
 
-            ShortToUrl shortUrlToUrl = new ShortToUrl();
-            shortUrlToUrl.setShortUrl(shortUrl);
-            shortUrlToUrl.setUrl(urlTo);
-            shortToUrlRepository.save(shortUrlToUrl);
-            return urlConverter.convert(urlTo, shortUrl);
+            return urlConverter.convert(shortToUrlSaved);
         } else {
             return urlConverter.convert(shortUrlOpt.get().getUrl(), shortUrlOpt.get().getShortUrl());
         }

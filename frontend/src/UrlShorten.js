@@ -31,7 +31,7 @@ class UrlShorten extends Component {
             },
             body: JSON.stringify({longUrl, shortUrl}),
         }).then(response => response.json())
-        .then(data => this.setState({...data, message: data.message}));
+        .then(data => this.setState({...data, message: data.message, shortUrl: data.shortUrl}));
     }
 
     render() {

@@ -25,7 +25,8 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class UrlServiceTest {
 
-    private static final String SHORT_URL = "short.url";
+    private static final Long SHORT_URL = 1L;
+    private static final String LONG_URL = "Some long url";
 
     @Mock
     private UrlToShortRepository urlToShortRepository;
@@ -57,7 +58,7 @@ public class UrlServiceTest {
     @Test
     public void testGetByShort() throws UrlNotFoundException {
         //given
-        ShortToUrl shortToUrl = new ShortToUrl();
+        ShortToUrl shortToUrl = new ShortToUrl(LONG_URL);
         shortToUrl.setShortUrl(SHORT_URL);
         ShortifyDto shortifyDto = new ShortifyDto();
 
@@ -66,7 +67,7 @@ public class UrlServiceTest {
         when(urlConverter.convert(shortToUrl)).thenReturn(shortifyDto);
         //then
 
-        ShortifyDto result = urlService.getByShort(SHORT_URL);
+        ShortifyDto result = urlService.getByShort(SHORT_URL.toString());
         Assert.assertEquals(result, shortifyDto);
         verify(shortToUrlRepository).findById(SHORT_URL);
         verify(urlConverter).convert(shortToUrl);
@@ -78,7 +79,7 @@ public class UrlServiceTest {
         when(shortToUrlRepository.findById(SHORT_URL)).thenReturn(Optional.empty());
         //then
 
-        urlService.getByShort(SHORT_URL);
+        urlService.getByShort(SHORT_URL.toString());
 
         verify(shortToUrlRepository).findById(SHORT_URL);
         verifyZeroInteractions(urlConverter);
