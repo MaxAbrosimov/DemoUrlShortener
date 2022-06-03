@@ -9,7 +9,7 @@ MVP flow:
 
 What left:
 - Add logging
-- Cover with unit tests
+- Add more unit tests to reach 100% coverage
 
 
 ## Prerequisites
@@ -40,7 +40,7 @@ curl --location --request POST 'http://localhost:8080/v1/url/shortifyUrl' \
 curl --location --request POST 'http://localhost:8080/v1/url/getByShort' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-"shortUrl": "4d8bd056"
+"shortUrl": ${shortUrl}"
 }' 
 
 
