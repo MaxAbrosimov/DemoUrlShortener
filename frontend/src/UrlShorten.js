@@ -30,7 +30,7 @@ class UrlShorten extends Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({longUrl, shortUrl}),
-        }).then(response => response.json())
+        }).then(response => response.json() || response)
         .then(data => this.setState({...data, message: data.message, shortUrl: data.shortUrl}));
     }
 
