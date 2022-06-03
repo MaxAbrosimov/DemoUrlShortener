@@ -47,7 +47,7 @@ public class UrlController {
     }
 
     @ExceptionHandler(UrlException.class)
-    public ResponseEntity<Object> handleCityNotFoundException(UrlException ex, WebRequest request) {
+    public ResponseEntity<Object> handleUrlException(UrlException ex, WebRequest request) {
 
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
@@ -57,7 +57,7 @@ public class UrlController {
     }
 
     @ExceptionHandler(UrlNotFoundException.class)
-    public ResponseEntity<Object> handleCityNotFoundException(UrlNotFoundException ex, WebRequest request) {
+    public ResponseEntity<Object> handleUrlNotException(UrlNotFoundException ex, WebRequest request) {
 
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());

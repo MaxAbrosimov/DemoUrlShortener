@@ -45,6 +45,8 @@ public class UrlService {
         return urlConverter.convert(shortToUrlRepository.findById(shortUrl).orElseThrow(UrlNotFoundException::new));
     }
 
+    //TODO
+    // add logs, code cleanup
     public ShortifyDto shortifyUrl(String url) throws UrlException {
         String urlTo = (url.contains("http://") || url.contains("https://")) ? url : "https://" + url;
         UrlValidator.validate(urlTo);

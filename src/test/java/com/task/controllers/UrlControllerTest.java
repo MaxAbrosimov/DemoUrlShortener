@@ -12,10 +12,13 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.context.request.WebRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -88,6 +91,34 @@ public class UrlControllerTest {
         verify(urlService).getByShort(request.getShortUrl());
     }
 
+    @Test
+    public void testHandleUrlException() {
+        //given
+        String exceptionMessage = "some error message";
+        UrlException exception = new UrlException(exceptionMessage);
+        WebRequest request = mock(WebRequest.class);
+        //then
 
+        ResponseEntity<Object> result = urlController.handleUrlException(exception, request);
+        Assert.assertEquals(result.getStatusCode(), HttpStatus.BAD_REQUEST);
+        Map<String, Object> body = (Map<String, Object>) result.getBody();
+        Assert.assertTrue(body.containsKey("timestamp"));
+        Assert.assertTrue(body.containsKey("message"));
+        String bodyMessage = (String) body.get("message");
+        Assert.assertEquals(bodyMessage, exceptionMessage);
+    }
+
+    @Test
+    public void testHandleUrlNotFoundException() {
+        //given
+        UrlNotFoundException exception = new UrlNotFoundException();
+        WebRequest request = mock(WebRequest.class);
+        //then
+
+        ResponseEntity<Object> result = urlController.handleUrlNotException(exception, request);
+        Assert.assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
+        Map<String, Object> body = (Map<String, Object>) result.getBody();
+        Assert.assertTrue(body.containsKey("timestamp"));
+    }
 
 }
