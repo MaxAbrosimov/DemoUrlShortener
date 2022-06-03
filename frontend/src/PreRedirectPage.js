@@ -24,9 +24,14 @@ class PreRedirectPage extends Component {
                 body: JSON.stringify({shortUrl}),
             }).then(response => {
                 if (response.status === 200) {
-                    window.open(response.json().longUrl, '_self', 'noopener,noreferrer')
+                    return response.json();
                 } else {
                     this.setState({ loading: false, message: response.statusText });
+                    return {};
+                }
+            }).then(data => {
+                if (data) {
+                    window.open(data.longUrl, '_self', 'noopener,noreferrer')
                 }
             })
         }
