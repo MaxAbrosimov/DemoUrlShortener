@@ -1,8 +1,8 @@
 package com.task.controllers;
 
 import com.task.dtos.ShortifyDto;
-import com.task.dtos.UrlException;
-import com.task.dtos.UrlNotFoundException;
+import com.task.dtos.exception.UrlException;
+import com.task.dtos.exception.UrlNotFoundException;
 import com.task.services.UrlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

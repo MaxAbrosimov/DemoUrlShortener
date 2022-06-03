@@ -2,11 +2,11 @@ package com.task.services;
 
 import com.task.converters.UrlConverter;
 import com.task.dtos.ShortifyDto;
-import com.task.dtos.UrlNotFoundException;
+import com.task.dtos.exception.UrlNotFoundException;
 import com.task.utils.UrlShortener;
 import com.task.domain.ShortToUrl;
 import com.task.domain.UrlToShort;
-import com.task.dtos.UrlException;
+import com.task.dtos.exception.UrlException;
 import com.task.repositories.ShortToUrlRepository;
 import com.task.repositories.UrlToShortRepository;
 import com.task.validators.UrlValidator;

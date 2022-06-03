@@ -1,5 +1,5 @@
 package com.task.validators;
-import com.task.dtos.UrlException;
+import com.task.dtos.exception.UrlException;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;

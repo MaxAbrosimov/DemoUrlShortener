@@ -1,4 +1,4 @@
-package com.task.dtos;
+package com.task.dtos.exception;
 
 public abstract class AbstractUrlException extends Exception {
 

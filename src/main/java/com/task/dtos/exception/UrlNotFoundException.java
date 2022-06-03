@@ -1,3 +1,3 @@
-package com.task.dtos;
+package com.task.dtos.exception;
 
 public class UrlNotFoundException extends AbstractUrlException {}
